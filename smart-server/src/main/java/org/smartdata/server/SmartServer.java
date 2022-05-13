@@ -23,7 +23,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.zeppelin.server.SmartZeppelinServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -64,7 +63,6 @@ public class SmartServer {
   private boolean enabled;
 
   private SmartRpcServer rpcServer;
-  private SmartZeppelinServer zeppelinServer;
 
   static {
     SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -86,7 +84,6 @@ public class SmartServer {
     initServiceMode(conf);
     engine = new SmartEngine(context);
     rpcServer = new SmartRpcServer(this, conf);
-    zeppelinServer = new SmartZeppelinServer(conf, engine);
 
     LOG.info("Finish Init Smart Server");
   }
@@ -230,9 +227,6 @@ public class SmartServer {
 
     rpcServer.start();
 
-    if (zeppelinServer != null) {
-      zeppelinServer.start();
-    }
   }
 
   private void startEngines() throws Exception {
@@ -268,10 +262,6 @@ public class SmartServer {
   private void stop() throws Exception {
     if (engine != null) {
       engine.stop();
-    }
-
-    if (zeppelinServer != null) {
-      zeppelinServer.stop();
     }
 
     try {
